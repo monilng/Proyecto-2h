@@ -14,14 +14,14 @@ public class GUI implements ActionListener{
     JList<Integer> listaDatos,listaDatos2, listaDatos3,listaDatos4;
     DefaultListModel<Integer> modelo, modelo2, modelo3, modelo4;
     JScrollPane scrollLista, scrollLista2, scrollLista3, scrollLista4;
-    JButton agregar, eliminar, borrar, quickSort, shellSort;
+    JButton agregar, eliminar, borrar, quickSort, shellSort, generarRandom;
     Ordenamientos ordenamientos;
 
     public GUI (){
         ventana = new JFrame();
         lblIngreso = new JLabel("Ingresar dato: ");
         txtDatos = new JTextField();
-        txtDatos.setBounds(685, 20, 150, 40);
+        txtDatos.setBounds(655, 20, 150, 40);
 
         txtDatos.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){  
@@ -70,6 +70,14 @@ public class GUI implements ActionListener{
         borrar.setBounds(870,70,170,30);
         borrar.addActionListener(this);
 
+        generarRandom = new JButton("Generar lista aleatoria");
+        generarRandom.setBounds(810, 23, 200, 30);
+        generarRandom.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                generarLista();
+            }
+        });
+
         quickSort = new JButton("QuickSort");
         quickSort.setBounds(215, 380,170, 30);
 
@@ -109,6 +117,7 @@ public class GUI implements ActionListener{
         ventana.add(agregar);
         ventana.add(eliminar);
         ventana.add(borrar);
+        ventana.add(generarRandom);
         ventana.add(quickSort);
         ventana.add(shellSort);
         ventana.add(mensaje);
@@ -137,11 +146,23 @@ public class GUI implements ActionListener{
 
         private void agregarDato(){
             try {
-                Integer Dato = Integer.parseInt(txtDatos.getText());
-                modelo.addElement(Dato);
-                modelo2.addElement(Dato);
-                modelo3.addElement(Dato);
-                modelo4.addElement(Dato);
+                String Datos = txtDatos.getText();  // Suponiendo que txtDatos es un campo de texto
+                String[] partes = Datos.split(" ");  // Dividir la cadena en subcadenas por espacios
+                
+                // Crear un arreglo de enteros con el mismo tamaño que el arreglo de cadenas
+                Integer[] numeros = new Integer[partes.length];
+                
+                // Convertir cada subcadena en un número entero
+                for (int i = 0; i < partes.length; i++) {
+                    numeros[i] = Integer.parseInt(partes[i]);
+                }
+                for (Integer Dato : numeros){
+                    modelo.addElement(Dato);
+                    modelo2.addElement(Dato);
+                    modelo3.addElement(Dato);
+                    modelo4.addElement(Dato);
+
+                }
                 txtDatos.setText("");
             } catch(NumberFormatException e) {
                 mensaje.setText("Error: Ingrese un numero valido");
@@ -214,6 +235,36 @@ public class GUI implements ActionListener{
 
             long tiempo = end - init;
             tiempoEjecucion.setText("Shell Sort: " + tiempo +  "ms");
+        }
+
+        private void generarLista(){
+            String cantidadNmr = JOptionPane.showInputDialog(ventana,"Ingrese la cantidad de numeros que desea generar");
+            if (cantidadNmr != null && ! cantidadNmr.isEmpty()){
+                try {
+                    int cantidad = Integer.parseInt(cantidadNmr);
+                    if (cantidad > 0){
+                        int [] lista = new int[cantidad];
+
+                        for (int i = 0; i < cantidad; i++) {
+                            lista[i] = (int) (Math.random() * cantidad);
+                        }
+
+                        for (int Dato : lista){
+                            modelo.addElement(Dato);
+                            modelo2.addElement(Dato);
+                            modelo3.addElement(Dato);
+                            modelo4.addElement(Dato);
+                    }
+
+                    JOptionPane.showMessageDialog(ventana, "Se generaron correctamente.");
+                    } else {
+                        JOptionPane.showMessageDialog(ventana, "Por favor ingrese un número mayor a 0.");
+                    }
+            
+                } catch (NumberFormatException e){
+                    JOptionPane.showMessageDialog(ventana, "Por favor ingrese un número válido.");
+                }
+            }
         }
       /*   private void calcularTiempo(long tiempoEjecucion){
             TiempoEjecucion.setText(tiempoEjecucion + " ms" );

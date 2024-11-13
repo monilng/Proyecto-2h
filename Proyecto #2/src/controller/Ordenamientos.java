@@ -55,6 +55,71 @@ public class Ordenamientos{
         }
     }
 
+    public static Object[] mergeSort(Object[] lista){
+
+		if (lista.length <= 1){
+			return lista;
+
+		}
+		int medio = lista.length/2;
+		Object[] izq = new Object[medio];
+		Object[] derecha = new Object[lista.length - medio];
+		
+
+		for(int i = 0; i < medio; i++){
+			izq[i] = lista[i];
+		}
+		for(int i = medio; i < lista.length; i++){
+			derecha[i - medio] = lista[i];
+		}
+
+		izq = mergeSort(izq);
+		derecha = mergeSort(derecha);
+		
+		return merge(izq, derecha);
+
+	}
+
+	public static Object[] merge(Object[] izq, Object[] derecha){
+
+		Object[] result = new Object[izq.length + derecha.length];
+		int a = 0, b = 0, c =0;
+
+		while ( a < izq.length && b < derecha.length){
+			if (((Comparable) izq[a]).compareTo(derecha[b])<= 0){
+				result[c++] = izq[a++]; 
+			} else{
+				result[c++] = derecha[b++];
+			}
+		}
+		while (a < izq.length){
+			result[c++] = izq[a++];
+		}
+
+		while (b < derecha.length){
+			result[c++] = derecha[b++];
+		}
+		return result;
+
+	}
+
+    static void seleccion(Object[] lista, int tamayo){
+		for(int a = 0, b = 0, c = 0; a < tamayo-1; a++){
+			c = a;
+			for(b = a+1; b < tamayo; b++){
+				if(((Comparable) lista[c]).compareTo(lista[b]) > 0){
+					c = b;
+				}
+			}
+			Object tem = lista[a];
+			lista[a] = lista[c];
+			lista[c] = tem;
+		}
+
+	}
+
+		
+
     /*    public static void main(String[] args) {
             int[] lista = {3, 1, 4, 1, 5, 9, 2, 6, 5};
 

@@ -10,11 +10,11 @@ import java.awt.event.*;
 public class GUI implements ActionListener{
     JFrame ventana;
     JTextField txtDatos;
-    JLabel lblIngreso, mensaje, tiempoEjecucion,tiempoEjecucion2;
+    JLabel lblIngreso, mensaje, tiempoEjecucion,tiempoEjecucion2, tiempoEjecucion3, tiempoEjecucion4;
     JList<Integer> listaDatos,listaDatos2, listaDatos3,listaDatos4;
     DefaultListModel<Integer> modelo, modelo2, modelo3, modelo4;
     JScrollPane scrollLista, scrollLista2, scrollLista3, scrollLista4;
-    JButton agregar, eliminar, borrar, quickSort, shellSort, generarRandom;
+    JButton agregar, eliminar, borrar, quickSort, shellSort, mergeSort, seleccion, generarRandom;
     Ordenamientos ordenamientos;
 
     public GUI (){
@@ -79,7 +79,8 @@ public class GUI implements ActionListener{
         });
 
         quickSort = new JButton("QuickSort");
-        quickSort.setBounds(215, 380,170, 30);
+       quickSort.setBounds(215, 380, 170, 30);
+
 
         ordenamientos = new Ordenamientos(); //MOVER DE LUGAR
 
@@ -90,11 +91,31 @@ public class GUI implements ActionListener{
         });
         
         shellSort = new JButton("ShellSort");
-        shellSort.setBounds(700, 380,170,30);
+        shellSort.setBounds(400, 380, 170, 30);
+
 
         shellSort.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 ssort();
+            }
+        });
+
+
+        mergeSort = new JButton("MergeSort");
+        mergeSort.setBounds(585, 380, 170, 30);
+
+        mergeSort.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                msort();
+            }
+        });
+
+        seleccion = new JButton("Seleccion");
+        seleccion.setBounds(770, 380, 170, 30);
+
+        seleccion.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                select();
             }
         });
 
@@ -103,6 +124,12 @@ public class GUI implements ActionListener{
 
         tiempoEjecucion2 = new JLabel();
         tiempoEjecucion2.setBounds(405,198,300,300);
+
+        tiempoEjecucion3 = new JLabel();
+        tiempoEjecucion3.setBounds(405,198,300,300); // definir la posicion
+
+        tiempoEjecucion4 = new JLabel();
+        tiempoEjecucion4.setBounds(405,198,300,300); // definir la posicion
 
         mensaje = new JLabel();
         mensaje.setBounds(670, 90, 220,40);
@@ -120,9 +147,13 @@ public class GUI implements ActionListener{
         ventana.add(generarRandom);
         ventana.add(quickSort);
         ventana.add(shellSort);
+        ventana.add(mergeSort);
+        ventana.add(seleccion);
         ventana.add(mensaje);
         ventana.add(tiempoEjecucion);
         ventana.add(tiempoEjecucion2);
+        ventana.add(tiempoEjecucion3);
+        ventana.add(tiempoEjecucion4);
 
         ventana.setSize(1600, 800);
         ventana.setVisible(true);  
@@ -237,6 +268,50 @@ public class GUI implements ActionListener{
             tiempoEjecucion.setText("Shell Sort: " + tiempo +  "ms");
         }
 
+        private void msort(){
+            Integer [] lista = new Integer[modelo3.getSize()];
+            for (int i = 0; i< modelo3.getSize(); i++){
+                lista[i]=modelo3.getElementAt(i);
+            }
+
+            long init = System.currentTimeMillis();
+
+            ordenamientos.shellSort(lista, lista.length);
+
+            long end = System.currentTimeMillis();
+            modelo3.clear();
+
+            for (Integer numero : lista) {
+                modelo3.addElement(numero);
+            }
+
+            long tiempo = end - init;
+            tiempoEjecucion.setText("Merge Sort: " + tiempo +  "ms");
+            
+        }
+
+        private void select(){
+            Integer [] lista = new Integer[modelo4.getSize()];
+            for (int i = 0; i< modelo4.getSize(); i++){
+                lista[i]=modelo4.getElementAt(i);
+            }
+
+            long init = System.currentTimeMillis();
+
+            ordenamientos.shellSort(lista, lista.length);
+
+            long end = System.currentTimeMillis();
+            modelo4.clear();
+
+            for (Integer numero : lista) {
+                modelo4.addElement(numero);
+            }
+
+            long tiempo = end - init;
+            tiempoEjecucion.setText("Seleccion: " + tiempo +  "ms");
+
+        }
+
         private void generarLista(){
             String cantidadNmr = JOptionPane.showInputDialog(ventana,"Ingrese la cantidad de numeros que desea generar");
             if (cantidadNmr != null && ! cantidadNmr.isEmpty()){
@@ -266,8 +341,37 @@ public class GUI implements ActionListener{
                 }
             }
         }
-      /*   private void calcularTiempo(long tiempoEjecucion){
-            TiempoEjecucion.setText(tiempoEjecucion + " ms" );
+     
+    
+        public class Main{
+    
+            static String MiAlgoritmo(int[] l){
+            
+                StringBuilder sb = new StringBuilder("");
+                
+                for(int i=0; i < l.length; i++){
+                    l[i] = i + 1;
+                    sb.append( l[i] + (i < l.length-1 ? ", " : "") );
+                }
+                sb.append("\n");
+                
+                return sb.toString();
+            }
+            
+            public static void main(String[] args) {
+                int n = 10000000;
+                int[] lista = new int[n];
+                
+                long init = System.currentTimeMillis( );
+                String respuesta = MiAlgoritmo(lista);
+                long end = System.currentTimeMillis( );
+                
+                //System.out.println( respuesta );
+                System.out.println( "\nTiempo de ejecucion de MiAlgoritmo(" +lista.length+ "): " + (end - init) + " ms" );
+                
+                System.out.println("Presione ENTER para continuar...");
+                new java.util.Scanner(System.in).nextLine();
+            }
         }
-     */
+     
 }

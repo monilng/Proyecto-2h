@@ -56,7 +56,7 @@ public class Ordenamientos{
         }
     }
 
-    public static int[] mergeSort(Integer[] lista){
+    public static Integer[] mergeSort(Integer[] lista){
 
 		if (lista.length <= 1) {
             return lista;
@@ -126,34 +126,5 @@ public class Ordenamientos{
         }
 
 	}
-
-
-    /*    public static void main(String[] args) {
-            int[] lista = {3, 1, 4, 1, 5, 9, 2, 6, 5};
-
-            Ordenamientos ordenamientos = new Ordenamientos();
-    
-            // Mostrar el arreglo antes de ordenar
-            System.out.println("Lista antes de ordenar:");
-            for (int i : lista) {
-                System.out.print(i + " ");
-            }
-    
-            // Ordenar la lista usando QuickSort
-            ordenamientos.quickSort(lista);
-    
-            // Mostrar el arreglo después de ordenar
-            System.out.println("\nLista después de ordenar:");
-            for (int i : lista) {
-                System.out.print(i + " ");
-            }
-
-            ordenamientos.shellSort(lista, lista.length);
-            System.out.println("\nLista después de ordenar (ShellSort):");
-            for (int i : lista) {
-                 System.out.print(i + " ");
-            }
-
-        } */
     
 }

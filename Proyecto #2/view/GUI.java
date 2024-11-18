@@ -10,7 +10,7 @@ import java.awt.event.*;
 public class GUI implements ActionListener{
     JFrame ventana;
     JTextField txtDatos;
-    JLabel lblIngreso, mensaje, tiempoEjecucion,tiempoEjecucion2, tiempoEjecucion3, tiempoEjecucion4;
+    JLabel lblIngreso, mensaje, tiempoEjecucion,tiempoEjecucion2, tiempoEjecucion3, tiempoEjecucion4, instrucciones;
     JList<Integer> listaDatos,listaDatos2, listaDatos3,listaDatos4;
     DefaultListModel<Integer> modelo, modelo2, modelo3, modelo4;
     JScrollPane scrollLista, scrollLista2, scrollLista3, scrollLista4;
@@ -19,9 +19,12 @@ public class GUI implements ActionListener{
 
     public GUI (){
         ventana = new JFrame();
-        lblIngreso = new JLabel("Ingresar dato: ");
+        lblIngreso = new JLabel("Ingresar datos: ");
+        lblIngreso.setBounds(435, 4, 100,50);
+        instrucciones = new JLabel("Si desea ingresar datos de un solo, escribalo con un espacio de por medio");
+        instrucciones.setBounds(500,1, 700, 20);
         txtDatos = new JTextField();
-        txtDatos.setBounds(655, 20, 150, 40);
+        txtDatos.setBounds(525, 20, 250, 40);
 
         txtDatos.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){  
@@ -59,11 +62,11 @@ public class GUI implements ActionListener{
         //scrollLista.setViewportView();
 
         agregar = new JButton("Agregar");
-        agregar.setBounds(375, 70, 170, 30);
+        agregar.setBounds(395, 70, 170, 30);
         agregar.addActionListener(this);
 
-        eliminar = new JButton("Eliminar");
-        eliminar.setBounds(590, 70, 170, 30);
+        eliminar = new JButton("Eliminar elemento");
+        eliminar.setBounds(620, 70, 170, 30);
         eliminar.addActionListener(this);
 
         borrar = new JButton("Borrar lista");
@@ -91,7 +94,7 @@ public class GUI implements ActionListener{
         });
         
         shellSort = new JButton("ShellSort");
-        shellSort.setBounds(400, 380, 170, 30);
+        shellSort.setBounds(700, 380, 170, 30);
 
 
         shellSort.addActionListener(new ActionListener(){
@@ -102,7 +105,7 @@ public class GUI implements ActionListener{
 
 
         mergeSort = new JButton("MergeSort");
-        mergeSort.setBounds(585, 380, 170, 30);
+        mergeSort.setBounds(215, 700, 170, 30);
 
         mergeSort.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
@@ -111,7 +114,7 @@ public class GUI implements ActionListener{
         });
 
         seleccion = new JButton("Seleccion");
-        seleccion.setBounds(770, 380, 170, 30);
+        seleccion.setBounds(700, 700, 170, 30);
 
         seleccion.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
@@ -126,16 +129,17 @@ public class GUI implements ActionListener{
         tiempoEjecucion2.setBounds(405,198,300,300);
 
         tiempoEjecucion3 = new JLabel();
-        tiempoEjecucion3.setBounds(405,198,300,300); // definir la posicion
+        tiempoEjecucion3.setBounds(405,530,300,300); // definir la posicion
 
         tiempoEjecucion4 = new JLabel();
-        tiempoEjecucion4.setBounds(405,198,300,300); // definir la posicion
+        tiempoEjecucion4.setBounds(895,530,300,300); // definir la posicion
 
         mensaje = new JLabel();
         mensaje.setBounds(670, 90, 220,40);
 
         ventana.setLayout(null);
         ventana.add(lblIngreso);
+        ventana.add(instrucciones);
         ventana.add(txtDatos);
         ventana.add(scrollLista);
         ventana.add(scrollLista2);
@@ -218,11 +222,10 @@ public class GUI implements ActionListener{
             modelo4.clear();
             tiempoEjecucion.setText(null);
             tiempoEjecucion2.setText(null);
+            tiempoEjecucion3.setText(null);
+            tiempoEjecucion4.setText(null);
         }
 
-    /*     public static void main(String[] args) {
-            new GUI(); // Crear instancia de GUI para mostrar la ventana
-        }*/
 
         //metodos para convertir las JListas a arreglo tipo INTEGER (Paramentro en Ordenamientos)
         private void qsort(){
@@ -286,7 +289,7 @@ public class GUI implements ActionListener{
             }
 
             long tiempo = end - init;
-            tiempoEjecucion.setText("Merge Sort: " + tiempo +  "ms");
+            tiempoEjecucion3.setText("Merge Sort: " + tiempo +  "ms");
             
         }
 
@@ -308,7 +311,7 @@ public class GUI implements ActionListener{
             }
 
             long tiempo = end - init;
-            tiempoEjecucion.setText("Seleccion: " + tiempo +  "ms");
+            tiempoEjecucion4.setText("Seleccion: " + tiempo +  "ms");
 
         }
 
@@ -339,38 +342,6 @@ public class GUI implements ActionListener{
                 } catch (NumberFormatException e){
                     JOptionPane.showMessageDialog(ventana, "Por favor ingrese un número válido.");
                 }
-            }
-        }
-     
-    
-        public class Main{
-    
-            static String MiAlgoritmo(int[] l){
-            
-                StringBuilder sb = new StringBuilder("");
-                
-                for(int i=0; i < l.length; i++){
-                    l[i] = i + 1;
-                    sb.append( l[i] + (i < l.length-1 ? ", " : "") );
-                }
-                sb.append("\n");
-                
-                return sb.toString();
-            }
-            
-            public static void main(String[] args) {
-                int n = 10000000;
-                int[] lista = new int[n];
-                
-                long init = System.currentTimeMillis( );
-                String respuesta = MiAlgoritmo(lista);
-                long end = System.currentTimeMillis( );
-                
-                //System.out.println( respuesta );
-                System.out.println( "\nTiempo de ejecucion de MiAlgoritmo(" +lista.length+ "): " + (end - init) + " ms" );
-                
-                System.out.println("Presione ENTER para continuar...");
-                new java.util.Scanner(System.in).nextLine();
             }
         }
      

@@ -167,16 +167,19 @@ public class Ordenamientos{
 	}
 
 	
-        public void insercion(Integer[] lista) {
-	    for (int i = 1; i < lista.length; i++) {
-	        int clave = lista[i];
+	  public void insercion(ListaP lista) {
+	    for (int i = 1; i < lista.obtenerTamayo(); i++) {
+	        Nodo clave = lista.get(i);  
 	        int j = i - 1;
 	
-	        while (j >= 0 && lista[j] > clave) {
-	            lista[j + 1] = lista[j];
+	        while (j >= 0 && lista.get(j).dato > clave.dato) {
+	            Nodo nodoActual = lista.get(j);
+	            Nodo siguienteNodo = lista.get(j + 1);
+	            nodoActual.dato = siguienteNodo.dato;  
 	            j--;
 	        }
-	        lista[j + 1] = clave;
+	        
+	        lista.get(j + 1).dato = clave.dato;
 	    }
 	}
 

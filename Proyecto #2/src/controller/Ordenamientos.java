@@ -1,43 +1,63 @@
-package src.controller;
+package controller;
+
+import ListaP;
+import Nodo;
 
 public class Ordenamientos{
     
-    public int partir(Integer [] lista, int low, int high){
+    public Nodo partir(Nodo low, Nodo high) {
+        int pivote = low.dato;  // Usamos el primer nodo como pivote
+        Nodo left = low;
+        Nodo right = high;
 
-        int pivote = lista[low];
-        while (low < high){
-            while (low < high && lista[high] >= pivote){
-                --high;
+        while (left != right) {
+            // Mover right hasta encontrar un valor menor que el pivote
+            while (left != right && right.dato >= pivote) {
+                right = right.siguiente;
             }
-            swap(lista, low, high);
 
-            while(low < high && lista[low] <= pivote){
-                low++;
+            // Si left != right, intercambiamos los valores de los nodos
+            if (left != right) {
+                left.swap(right);
             }
-            swap(lista,low,high);
+
+            // Mover left hasta encontrar un valor mayor que el pivote
+            while (left != right && left.dato <= pivote) {
+                left = left.siguiente;
+            }
+
+            // Si left != right, intercambiamos los valores de los nodos
+            if (left != right) {
+                left.swap(right);
+            }
         }
-        return low;
 
+        return left;  // Retorna el nodo pivote
     }
 
-    public void qSort(Integer [] lista, int low, int high){
-        int pivote;
-        if(low < high){
-            pivote = partir(lista, low, high);
-            qSort(lista, low, pivote - 1);
-            qSort(lista, pivote + 1, high);
+    // Método recursivo de quicksort para ordenar la lista
+    public void qSort(Nodo low, Nodo high) {
+        if (low != null && high != null && low != high && low != high.siguiente) {
+            Nodo pivote = partir(low, high);
+
+            // Recursión para la sublista izquierda
+            Nodo leftSublist = low;
+            Nodo rightSublist = pivote.siguiente;
+            qSort(leftSublist, pivote);  // Ordena la parte antes del pivote
+            qSort(rightSublist, high);  // Ordena la parte después del pivote
         }
     }
 
-    public void quickSort(Integer []lista){
-        qSort(lista,0, lista.length-1);
+    // Método para encontrar el último nodo
+    public void quickSort(Nodo head) {
+        // Necesitamos encontrar el último nodo (high)
+        Nodo high = head;
+        while (high != null && high.siguiente != null) {
+            high = high.siguiente;
+        }
+        qSort(head, high);  // Llamada al método qSort
     }
-
-    private void swap(Integer [] lista, int i, int j){
-        int temp = lista[i];
-        lista[i] = lista[j];
-        lista[j] = temp;
-    }
+    
 
     public void shellSort(Integer [] lista, int size){
         int j, temp;
@@ -111,20 +131,70 @@ public class Ordenamientos{
         return result;
 	}
 
-    static void seleccion(Integer[] lista, int tamayo){
-		for (int i = 0; i < lista.length - 1; i++) {
-            int minIndex = i;
-            for (int j = i + 1; j < lista.length; j++) {
-                if (lista[j] < lista[minIndex]) {
-                    minIndex = j;
+    static void seleccion(ListaP lista, int tamayo){
+		for (int i = 0; i < lista.obtenerTamayo() - 1; i++) {
+            Nodo nI = lista.get(i);
+            Nodo minIndex = lista.get(i);
+            for (int j = i + 1; j < lista.obtenerTamayo(); j++) {
+                Nodo nJ = lista.get(j);
+                if (nJ.dato < minIndex.dato) {
+                    minIndex =  nJ;
                 }
             }
             
-            Integer temp = lista[minIndex];
-            lista[minIndex] = lista[i];
-            lista[i] = temp;
+            int temp = nI.dato;
+            nI.dato = minIndex.dato;
+            minIndex.dato = temp;
         }
-
 	}
+
+    public void burbujaMejorada(Integer[] lista) {
+	    boolean huboIntercambios;
+	    for (int i = 0; i < lista.length - 1; i++) {
+	        huboIntercambios = false;
+	        for (int j = 0; j < lista.length - 1 - i; j++) {
+	            if (lista[j] > lista[j + 1]) {
+	                swap(lista, j, j + 1);
+	                huboIntercambios = true;
+	            }
+	        }
+	        if (!huboIntercambios) break; 
+	    }
+	}
+
+	
+        public void insercion(Integer[] lista) {
+	    for (int i = 1; i < lista.length; i++) {
+	        int clave = lista[i];
+	        int j = i - 1;
+	
+	        while (j >= 0 && lista[j] > clave) {
+	            lista[j + 1] = lista[j];
+	            j--;
+	        }
+	        lista[j + 1] = clave;
+	    }
+	}
+
+    
+        
+            public static void main(String[] args) {
+                // Crear la lista enlazada: 5 -> 3 -> 8 -> 1 -> null
+                ListaP lista = new ListaP();
+
+                lista.push(73,0);
+                lista.push(12,1);
+                lista.push(2,2);
+                lista.push(13,3);
+        
+                // Crear el objeto QuicksortLista y ordenar
+                Ordenamientos ordenamientos = new Ordenamientos();
+                seleccion(lista, lista.obtenerTamayo());
+        
+                System.out.println("\nAfter sorting:");
+                for (int i = 0; i < lista.obtenerTamayo(); i++) {
+                System.out.println("Node " + i + ": " + lista.get(i).dato);
+                }
+            }
     
 }

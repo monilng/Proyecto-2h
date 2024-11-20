@@ -3,19 +3,24 @@ package view;
 import src.controller.Ordenamientos;
 
 import javax.swing.*;
-
 import java.awt.Color;
 import java.awt.event.*; 
 
 public class GUI implements ActionListener{
     JFrame ventana;
     JTextField txtDatos;
-    JLabel lblIngreso, mensaje, tiempoEjecucion,tiempoEjecucion2, tiempoEjecucion3, tiempoEjecucion4, instrucciones;
+    JLabel lblIngreso, titulo, mensaje, tiempoEjecucion,tiempoEjecucion2, tiempoEjecucion3, tiempoEjecucion4, instrucciones, mergeS, quickS, selS, shellS;
     JList<Integer> listaDatos,listaDatos2, listaDatos3,listaDatos4;
+    JList<String> listPodio;
+    DefaultListModel<String> mPodio;
     DefaultListModel<Integer> modelo, modelo2, modelo3, modelo4;
-    JScrollPane scrollLista, scrollLista2, scrollLista3, scrollLista4;
-    JButton agregar, eliminar, borrar, quickSort, shellSort, mergeSort, seleccion, generarRandom;
+    JScrollPane scrollLista, scrollLista2, scrollLista3, scrollLista4, scrollPodio;
+    JButton agregar, eliminar, borrar, quickSort, shellSort, mergeSort, seleccion, generarRandom, verPodio;
     Ordenamientos ordenamientos;
+    int[] podio = {20, 50, 80, 110}; //nuevo
+    int x = 10;
+    int lbWidth = 100, lbHeight = 20;
+
 
     public GUI (){
         ventana = new JFrame();
@@ -23,6 +28,24 @@ public class GUI implements ActionListener{
         lblIngreso.setBounds(435, 4, 100,50);
         instrucciones = new JLabel("Si desea ingresar datos de un solo, escribalo con un espacio de por medio");
         instrucciones.setBounds(500,1, 700, 20);
+        titulo = new JLabel("Podio");
+        titulo.setBounds(1000, 150, 350, 200);
+        //nuevo
+        mergeS = new JLabel();
+        mergeS.setText("Merge Sort");
+        mergeS.setForeground(Color.PINK);
+        quickS = new JLabel();
+        quickS.setText("Quick Sort");
+        quickS.setForeground(Color.BLUE);
+        shellS = new JLabel();
+        shellS.setText("Shell Sort");
+        shellS.setForeground(Color.GREEN);
+        selS = new JLabel();
+        selS.setText("Seleccion");
+        selS.setForeground(Color.RED);
+
+
+
         txtDatos = new JTextField();
         txtDatos.setBounds(525, 20, 250, 40);
 
@@ -36,12 +59,14 @@ public class GUI implements ActionListener{
         modelo2 = new DefaultListModel<>();
         modelo3 = new DefaultListModel<>();
         modelo4 = new DefaultListModel<>();
+        mPodio = new DefaultListModel<>(); //agregado
 
         //Jlist datos
         listaDatos = new JList<>(modelo);
         listaDatos2= new JList<>(modelo2);
         listaDatos3 = new JList<>(modelo3);
         listaDatos4 = new JList<>(modelo4);
+        listPodio = new JList<>(mPodio); //agregado
 
         scrollLista = new JScrollPane(listaDatos);
         scrollLista.setBounds(120,120,350,220);
@@ -58,6 +83,12 @@ public class GUI implements ActionListener{
         scrollLista4 = new JScrollPane(listaDatos4);
         scrollLista4.setBounds(600, 450, 350,220);
         listaDatos4.setForeground(Color.RED);
+
+        scrollPodio = new JScrollPane(listPodio);
+        scrollPodio.setBounds(1000, 200, 350, 300); // Ajusta el tamaño y la posición
+        ventana.add(scrollPodio);
+
+
 
         //scrollLista.setViewportView();
 
@@ -81,8 +112,21 @@ public class GUI implements ActionListener{
             }
         });
 
+        JButton ordenarTds = new JButton("TODOS");
+        ordenarTds.setBounds(1105,140,170,30);
+        ordenarTds.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+            qsort();
+            ssort();
+            select();
+            msort();
+            }
+
+        });
+        ventana.add(ordenarTds);
+
         quickSort = new JButton("QuickSort");
-       quickSort.setBounds(215, 380, 170, 30);
+        quickSort.setBounds(215, 380, 170, 30);
 
 
         ordenamientos = new Ordenamientos(); //MOVER DE LUGAR
@@ -140,11 +184,17 @@ public class GUI implements ActionListener{
         ventana.setLayout(null);
         ventana.add(lblIngreso);
         ventana.add(instrucciones);
+        ventana.add(titulo);// agregado
+        ventana.add(mergeS);//nuevos
+        ventana.add(shellS);
+        ventana.add(selS);
+        ventana.add(quickS);
         ventana.add(txtDatos);
         ventana.add(scrollLista);
         ventana.add(scrollLista2);
         ventana.add(scrollLista3);
         ventana.add(scrollLista4);
+        ventana.add(scrollPodio); //agregado
         ventana.add(agregar);
         ventana.add(eliminar);
         ventana.add(borrar);
@@ -228,6 +278,11 @@ public class GUI implements ActionListener{
 
 
         //metodos para convertir las JListas a arreglo tipo INTEGER (Paramentro en Ordenamientos)
+        private long tiempoQsort;
+        private long tiempoSsort;
+        private long tiempoMsort;
+        private long tiempoSelect;
+
         private void qsort(){
             Integer [] lista = new Integer[modelo.getSize()];
             for (int i = 0; i < modelo.getSize(); i++){
@@ -246,8 +301,10 @@ public class GUI implements ActionListener{
                 modelo.addElement(numero);
             }
 
-            long tiempo = end - init;
-            tiempoEjecucion2.setText("Quick Sort: " + tiempo + "ms");
+            tiempoQsort = end - init;
+            tiempoEjecucion.setText("Quick Sort: " + tiempoQsort + "ms");
+
+            generarPodio();
         }
 
         private void ssort(){
@@ -267,8 +324,10 @@ public class GUI implements ActionListener{
                 modelo2.addElement(numero);
             }
 
-            long tiempo = end - init;
-            tiempoEjecucion.setText("Shell Sort: " + tiempo +  "ms");
+            tiempoSsort = end - init;
+            tiempoEjecucion2.setText("Shell Sort: " + tiempoSsort +  "ms");
+
+            generarPodio();
         }
 
         private void msort(){
@@ -279,7 +338,7 @@ public class GUI implements ActionListener{
 
             long init = System.currentTimeMillis();
 
-            ordenamientos.shellSort(lista, lista.length);
+            ordenamientos.mergeSort(lista);
 
             long end = System.currentTimeMillis();
             modelo3.clear();
@@ -288,20 +347,21 @@ public class GUI implements ActionListener{
                 modelo3.addElement(numero);
             }
 
-            long tiempo = end - init;
-            tiempoEjecucion3.setText("Merge Sort: " + tiempo +  "ms");
-            
+            tiempoMsort = end - init;
+            tiempoEjecucion3.setText("Merge Sort: " + tiempoMsort +  "ms");
+
+            generarPodio(); 
         }
 
         private void select(){
-            Integer [] lista = new Integer[modelo4.getSize()];
-            for (int i = 0; i< modelo4.getSize(); i++){
-                lista[i]=modelo4.getElementAt(i);
+            ListaP [] lista = new ListaP[modelo2.getSize()];
+            for (int i = 0; i< modelo2.getSize(); i++){
+                lista.push(Integer.parseInt(modelo2.getElementAt(i)));
             }
 
             long init = System.currentTimeMillis();
 
-            ordenamientos.shellSort(lista, lista.length);
+            ordenamientos.seleccion(lista, lista.length);
 
             long end = System.currentTimeMillis();
             modelo4.clear();
@@ -310,9 +370,34 @@ public class GUI implements ActionListener{
                 modelo4.addElement(numero);
             }
 
-            long tiempo = end - init;
-            tiempoEjecucion4.setText("Seleccion: " + tiempo +  "ms");
+            tiempoSelect = end - init;
+            tiempoEjecucion4.setText("Seleccion: " + tiempoSelect +  "ms");
 
+            generarPodio();
+        }
+
+        //nuevo
+        private void generarPodio(){ 
+            JLabel[] metodos = {mergeS, quickS, shellS, selS};
+            long[] tiempos = {tiempoQsort,tiempoSsort, tiempoMsort, tiempoSelect};
+            for(int i = 0; i < tiempos.length - 1; i++){
+                for(int j = i + 1; j < tiempos.length; j++){
+                    if(tiempos[i] > tiempos[j]){
+                        long temp = tiempos[i];
+                        tiempos[i] = tiempos[j];
+                        tiempos[j] = temp;
+
+                        JLabel tempM = metodos[i];
+                        metodos[i] = metodos[j];
+                        metodos[j] = tempM;
+
+                    }
+                }
+            }
+            for(int i = 0; i < podio.length; i++){
+                metodos[i].setBounds(x, podio[i], lbWidth, lbHeight);
+            }
+            
         }
 
         private void generarLista(){

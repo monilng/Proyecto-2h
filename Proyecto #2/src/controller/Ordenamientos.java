@@ -148,18 +148,22 @@ public class Ordenamientos{
         }
 	}
 
-    public void burbujaMejorada(Integer[] lista) {
+	public void burbujaMejorada(ListaP lista) {
 	    boolean huboIntercambios;
-	    for (int i = 0; i < lista.length - 1; i++) {
+	    for (int i = 0; i < lista.obtenerTamayo() - 1; i++) {
 	        huboIntercambios = false;
-	        for (int j = 0; j < lista.length - 1 - i; j++) {
-	            if (lista[j] > lista[j + 1]) {
-	                swap(lista, j, j + 1);
+	        for (int j = 0; j < lista.obtenerTamayo() - 1 - i; j++) {
+	            Nodo nodo1 = lista.get(j);
+	            Nodo nodo2 = lista.get(j + 1);
+	            if (nodo1.dato > nodo2.dato) {
+	                
+	                int temp = nodo1.dato;
+	                nodo1.dato = nodo2.dato;
+	                nodo2.dato = temp;
 	                huboIntercambios = true;
 	            }
 	        }
-	        if (!huboIntercambios) break; 
-	    }
+	        if (!huboIntercambios) break;
 	}
 
 	
